@@ -6,7 +6,7 @@ contract Escrow {
     address public lawyer;
     uint public amount;
 
-    constructor(address _payer, address payable _payee, uint _amount) {
+    constructor(address _payer, address payable _payee, uint _amount) public {
         payer = _payer;
         payee = _payee;
         lawyer = msg.sender;
@@ -14,7 +14,7 @@ contract Escrow {
     }
     function deposit() public payable {
         // The send has to be able to send money
-        require(msg.sender == _payer, "Sender must be the payer");
+        require(msg.sender == payer, "Sender must be the payer");
         require(address(this).balance <= amount);
     }
     function release() public {
