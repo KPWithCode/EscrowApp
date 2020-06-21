@@ -15,7 +15,7 @@ contract Escrow {
     function deposit() public payable {
         // The send has to be able to send money
         require(msg.sender == payer, "Sender must be the payer");
-        require(address(this).balance <= amount);
+        require(address(this).balance <= amount, "Cant send more than escrow amount");
     }
     function release() public {
         //  All funds need to be received before it can be released
