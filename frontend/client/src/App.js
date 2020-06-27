@@ -4,12 +4,14 @@ import './App.css';
 const App = () => {
   const [web3,setWeb3] = useState();
   const [accounts, setAccounts] = useState([]);
+  const [contract, setContract] = useState();
+  const [balance, setBalance] = useState();
   return (
     <div className="App">
      <h1> Escrow</h1>
 
      <div>
-       <h3> Balance:   <b>wei</b></h3>
+       <p> Balance:   <b>wei</b></p>
      </div>
       <div>
         <form>
