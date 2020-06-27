@@ -34,6 +34,9 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
+  
+   // connecting truffle to front end create-react-app
+   contracts_build_directory: path.join(__dirname,"frontend/client/src/contracts"),
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
