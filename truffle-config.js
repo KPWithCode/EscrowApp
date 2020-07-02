@@ -1,3 +1,4 @@
+const path = require('path')
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -36,7 +37,7 @@ module.exports = {
    */
   
    // connecting truffle to front end create-react-app
-   contracts_build_directory: path.join(__dirname,"frontend/client/src/contracts"),
+   contracts_build_directory: path.join(__dirname, "frontend/client/src/contracts"),
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
