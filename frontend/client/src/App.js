@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { getWeb3 } from './utils';
 import Escrow from './contracts/Escrow.json';
 
@@ -13,34 +13,46 @@ class App extends Component {
     balance: undefined
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const web3 = await getWeb3();
     const accounts = web3.eth.getAccounts();
 
-    const networkId = web3.eth.net.getId();
-    const deployedNetwork = Escrow.networks[networkId];
+    const networkId =  await web3.eth.net.getId();
+    const deployedNetwork = await Escrow.networks[networkId];
     const contract = new web3.eth.Contract(
       Escrow.abi,
       deployedNetwork && deployedNetwork.address
     )
-    this.setState({ web3, accounts, contract}, this.updateBalance)
+    this.setState({ web3, accounts, contract}, this.update())
   }
-  update() {
+
+  async update() {
     const { contract } = this.state;
     const balance = await contract.methods.balanceOf().call();
     this.setState({ balance });
   }
-  deposit(e) {
+
+  async deposit(e) {
     e.preventDefault();
     const { contract, accounts } = this.state;
     await contract.methods.deposit().send({
       from: accounts[0],
       value: e.target.elements[0].value
     });
+    this.update()
   }
+  async release(e) {
+  e.preventDefault();
+  const { contract, accounts } = this.state;
+  await contract.methods.release().send({
+    from: accounts[0]
+  });
+  this.update()
+  }
+
   render() {
     const { balance } = this.state;
-    if(this.state.web3) {
+    if(!this.state.web3) {
       return <div>Loading....</div>
     }
     return (
@@ -48,7 +60,7 @@ class App extends Component {
        <h1> Escrow</h1>
   
        <div>
-         <p> Balance:   <b>wei</b></p>
+         <p> Balance:   <b>{balance}</b>wei</p>
        </div>
         <div>
           <form onSubmit={e => this.deposit(e)}>
@@ -62,7 +74,7 @@ class App extends Component {
         </div>
         <div>
           {/* button to release funds */}
-          <button type="submit">Release</button>
+          <button onClick={e => this.release(e)} type="submit">Release</button>
         </div>
       </div>
     );
